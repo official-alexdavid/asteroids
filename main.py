@@ -33,13 +33,24 @@ def main():
     while True:
         screen.fill("black")
         for shape in drawable:
-            shape.draw(screen)
+            if shape is Asteroid:
+                color = random.choice(["gray", "purple", "blue", "green", "orange", "yellow"])
+                shape.draw(color, screen)
+            else:
+                shape.draw(screen)
 
         updatable.update(dt)
         for asteroid in asteroids:
             if asteroid.collide(player):
                 print("Game over!")
                 sys.exit()
+            
+            for shot in shots:
+                if asteroid.collide(shot):
+                    asteroid.split()
+                    shot.kill()
+                    break
+
         pygame.display.flip()
 
         for event in pygame.event.get():
